@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>Pathfinder</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Comfortaa:300,400,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
+
+    </head>
+    <body>
+
+        <div class="container" id="container">
+
+            <!-- Hamburger button -->
+            <header>
+                <div class="header-container">
+                    <div class="hamburger" data-bind="click: toggleHamburger">
+                        <div class="hamburger-stripe"></div>
+                        <div class="hamburger-stripe"></div>
+                        <div class="hamburger-stripe"></div>
+                    </div>
+                    <div class="title">
+                        <h1>PathFinder</h1>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Side menu -->
+            <nav class="sideMenu" id="sideMenu">
+
+                <div class="filter-title">
+                    <h2>Filter places</h2>
+                </div>
+
+                <div class="filter-container">
+                    <form>
+                        <input type="text" placeholder="Filter your search..." class="filter-textbox" data-bind="textInput: filterQuery">
+                    </form>
+                </div>
+                <div class="item-container" data-bind="foreach: filteredLocations">
+                    <div class="item" data-bind="click: $parent.openWindow">
+                        <p data-bind="text: title"></p>
+                    </div>
+                </div>
+
+            </nav>
+
+            <!-- Map -->
+            <div class="map" id="map">
+
+                <script type="text/javascript" src="{{ url_for('static', filename = 'jquery.js') }}"></script>
+    			<script type="text/javascript" src="{{ url_for('static', filename = 'index.js') }}"></script>
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4OWn9GwizDJN49ltkqmV_NOIsmm9KGTs&callback=initMap&"></script>
+
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

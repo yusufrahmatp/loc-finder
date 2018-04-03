@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import AStar as AS
 
 app = Flask(__name__)
 
@@ -16,8 +17,7 @@ def crunchData():
 	end = data['end']
 
 	# Find shortest path
-	# 
-	# 
+	AS.AStar(adjacencyMatrix, distanceMatrix, start, end) 
 
 	return jsonify([0]);
 

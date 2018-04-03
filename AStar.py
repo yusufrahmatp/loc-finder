@@ -4,19 +4,21 @@ def AStar(_adjacencyMatrix, _distanceMatrix, _start, _end) :
 	listOfPath = []
 	closestInAdj = []
 	next = _start		# ini adalah nama simpul
+	prev = _start		# supaya tidak backtraking
 	distanceSaved = 0	# ini adalah jarak yang telah ditempuh
 	closestInAdj.append(_start)			# inisialisasi
 	closestInAdj.append(distanceSaved)		# inisialisasi
 	
 	while (next != _end) :
-		closestInAdj = subAStar(_adjacencyMatrix, _distanceMatrix, next, _end, distanceSaved)
+		closestInAdj = subAStar(_adjacencyMatrix, _distanceMatrix, next, prev, _end, distanceSaved)
+		prev = next
 		next = closestInAdj[0]
 		distanceSaved = closestInAdj[1]		
 		listOfPath.append(next)	
 	return listOfPath
 	
 
-def subAStar(_adjacencyMatrix, _distanceMatrix, current, _end, distanceSaved) :
+def subAStar(_adjacencyMatrix, _distanceMatrix, current, prev, _end, distanceSaved) :
 # mencari f(n) dengan nilai paling kecil dari seluruh simpul yang bertetangga dengannya
 # mengembalikan titik berupa integer
 	closest = []
@@ -24,8 +26,7 @@ def subAStar(_adjacencyMatrix, _distanceMatrix, current, _end, distanceSaved) :
 	closest.append(getLongestDistance(current, _end, _distanceMatrix, distanceSaved))	# indeks pertama (0) adalah nama simpulnya dan indeks kedua (1) adalah jarak terjauh
 	
 	for i in range(len(_adjacencyMatrix[current])) :
-		if (_adjacencyMatrix[current][i] != 0) :
-			#print(getFn(current, i, distanceSaved, _distanceMatrix))
+		if (i != prev and _adjacencyMatrix[current][i] != 0) :
 			if (getFn(current, i, _end, distanceSaved, _distanceMatrix) < closest[1]) :
 				closest[0] = i
 				closest[1] = getGn(current, i, distanceSaved, _distanceMatrix)

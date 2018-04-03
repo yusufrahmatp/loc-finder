@@ -123,3 +123,24 @@ span {
 	min-width: 50%;
     margin-bottom: 1vh;
 }
+
+.toastBox {
+    cursor: pointer;
+    width: 500px;
+    overflow-x: scroll;
+    height: 20px;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    margin-left: -400px;
+    bottom: 10px;
+    background-color: #FFFFFF;
+    color: #424242;
+    font-size: 0.9em;
+    padding: 10px;
+    text-align: center;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+    -moz-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+}

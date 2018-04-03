@@ -15,7 +15,11 @@ def crunchData():
 	start = data['start']
 	end = data['end']
 
-	print(distanceMatrix)
+	# Find shortest path
+	# 
+	# 
+
+	return jsonify([0]);
 
 if __name__ == '__main__':
 	app.run(port=5000)

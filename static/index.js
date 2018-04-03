@@ -8,6 +8,7 @@ var index = 0;
 var curr_marker = null;
 var markers = [];
 var paths = [];
+var specialPaths = []
 var adjacencyMatrix = [];
 var distanceMatrix = [];
 var markerList = $("#markerList");
@@ -367,6 +368,27 @@ function removePaths() {
   curr_marker = null;
 }
 
+function addSpecialPath(first, second) {
+  var path = new google.maps.Polyline({
+            path: [markers[first]['data']['position'], markers[second]['data']['position']],
+            strokeColor: '#2196F3',
+            strokeOpacity: 1.0,
+            strokeWeight: 4
+          });
+          path.setMap(map);
+
+  specialPaths.push({
+    path: path
+  });
+}
+
+function removeSpecialPaths() {
+  for (var i = 0; i < specialPaths.length; i++) {
+    specialPaths[i]['path'].setMap(null);
+  }
+  specialPaths = [];
+}
+
 //
 // LISTENER
 //
@@ -375,6 +397,7 @@ function removePaths() {
 $('#resetButton').on('click', function() {
   removeMarkers();
   removePaths();
+  removeSpecialPaths();
   removeMarkerList();
   removePathList();
   removeSelect();
@@ -382,6 +405,7 @@ $('#resetButton').on('click', function() {
 
 // Submit data
 $('#submitButton').on('click', function() {
+  removeSpecialPaths();
   createMatrix();
   createJSON();
 
@@ -389,13 +413,49 @@ $('#submitButton').on('click', function() {
     url: '/submit',
     data: createJSON(),
     type: 'POST',
-    success: function(result) {
-
+    success: function(response) {
+      displayOnMap(response);
+      displayResult(response);
     },
     error: function(error) {
       alert("Error "+error);
     }
   });
+});
+
+//
+// INCOMING HANDLER
+//
+function displayOnMap(result) {
+  for (var i = 1; i < result.length; i++) {
+    var path = paths.find(function(x) {
+      return (x['data']['first'] == result[i] && x['data']['second'] == result[i-1]) || 
+      (x['data']['first'] == result[i-1] && x['data']['second'] == result[i])
+    });
+
+    if (path != null) {
+      addSpecialPath(result[i], result[i-1]);
+    }
+  }
+}
+
+function displayResult(result) {
+  var text = "Shortest Path: ";
+  var total_distance = 0.0;
+  for (var i = 0; i < result.length; i++) {
+    if (i != 0) {
+      text = text.concat("- ");
+      total_distance += distanceMatrix[result[i-1]][result[i]];
+    }
+    text = text.concat(result[i]+" ");
+  }
+  text = text.concat("| Total Distance: "+total_distance.toFixed(2).toString()+" m");
+
+  $('.toastBox').text(text).fadeIn(400);
+}
+
+$('.toastBox').on('click', function() {
+  $('.toastBox').fadeOut(400);
 });
 
 //
@@ -427,9 +487,6 @@ function createMatrix() {
   for (var i = 0; i < paths.length; i++) {
     adjacencyMatrix[parseInt(paths[i]['data']['first'])][parseInt(paths[i]['data']['second'])] = 1;
     adjacencyMatrix[parseInt(paths[i]['data']['second'])][parseInt(paths[i]['data']['first'])] = 1;
-
-    console.log(adjacencyMatrix);
-    console.log(distanceMatrix);
   }
 }
 
@@ -500,4 +557,3 @@ function updatePathList() {
 function removePathList() {
   pathList.empty();
 }
-

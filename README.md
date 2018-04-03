@@ -3,10 +3,10 @@ Loc Finder is a web-based program which uses Google Maps API to receive input, p
 
 ## Running the program
 
-1. Interpret the python file
+1. Interpret the python file which will run Flask server
 
 ```
-python3 app.py
+$python3 app.py
 ```
 
 2. Access the program from browser

@@ -3,11 +3,13 @@
 //
 
 // Initialize Map
-var index = 0;
-var markers = []
-var paths = []
-var curr_marker = null;
 var map;
+var index = 0;
+var curr_marker = null;
+var markers = [];
+var paths = [];
+var adjacencyMatrix = [];
+var distanceMatrix = [];
 var markerList = $("#markerList");
 var pathList = $("#pathList");
 var startSelect = $("#startSelect");
@@ -376,12 +378,69 @@ $('#resetButton').on('click', function() {
   removeMarkerList();
   removePathList();
   removeSelect();
-})
+});
 
-//Find solution
-// $('#submitButton').on('click', function() {
+// Submit data
+$('#submitButton').on('click', function() {
+  createMatrix();
+  createJSON();
 
-// })
+  $.ajax ({
+    url: '/submit',
+    data: createJSON(),
+    type: 'POST',
+    success: function(result) {
+
+    },
+    error: function(error) {
+      alert("Error "+error);
+    }
+  });
+});
+
+//
+// DISTANCE AND POST
+//
+
+//Calculate distance
+function getDistance(latLng_1, latLng_2) {
+  return google.maps.geometry.spherical.computeDistanceBetween(latLng_1,latLng_2);
+}
+
+//Create matrix for transport
+function createMatrix() {
+  distanceMatrix = [];
+  adjacencyMatrix = [];
+  //Distance Matrix and initialize Adjacency Matrix
+  for (var i = 0; i < markers.length; i++) {
+    var row = [];
+    var row_init = [];
+    for (var j = 0; j < markers.length; j++) {
+      row.push(getDistance(markers[i]['data']['position'], markers[j]['data']['position']));
+      row_init.push(0);
+    }
+    distanceMatrix.push(row);
+    adjacencyMatrix.push(row_init);
+  }
+
+  //Adjacency matrix
+  for (var i = 0; i < paths.length; i++) {
+    adjacencyMatrix[parseInt(paths[i]['data']['first'])][parseInt(paths[i]['data']['second'])] = 1;
+    adjacencyMatrix[parseInt(paths[i]['data']['second'])][parseInt(paths[i]['data']['first'])] = 1;
+
+    console.log(adjacencyMatrix);
+    console.log(distanceMatrix);
+  }
+}
+
+function createJSON() {
+  return JSON.stringify ({
+    adjacency: adjacencyMatrix,
+    distance: distanceMatrix,
+    start: $(startSelect).val(),
+    end: $(endSelect).val()
+  });
+}
 
 //
 // MISC

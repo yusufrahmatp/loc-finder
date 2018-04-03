@@ -13,9 +13,6 @@ var pathList = $("#pathList");
 var startSelect = $("#startSelect");
 var endSelect = $("#endSelect");
 
-
-console.log(pathList); 
-
 function initMap() {
 	var itb = {lat: -6.890369, lng: 107.610368};
 
@@ -296,9 +293,6 @@ function addMarker(location, map) {
 	marker.addListener('click', function() {
 		addPath(marker);
 	});
-
-
-
 }
 
 //Remove all marker
@@ -367,8 +361,27 @@ function removePaths() {
 	for (var i = 0; i < paths.length; i++) {
 		paths[i]['path'].setMap(null);
 	}
+  paths = [];
+  curr_marker = null;
 }
 
+//
+// LISTENER
+//
+
+//Reset all
+$('#resetButton').on('click', function() {
+  removeMarkers();
+  removePaths();
+  removeMarkerList();
+  removePathList();
+  removeSelect();
+})
+
+//Find solution
+// $('#submitButton').on('click', function() {
+
+// })
 
 //
 // MISC
@@ -400,6 +413,11 @@ function updateSelect() {
 	}
 }
 
+function removeSelect() {
+  startSelect.empty();
+  endSelect.empty();
+}
+
 //Print path & marker (update & remove)
 function updateMarkerList() {
 	markerList.empty();
@@ -408,11 +426,19 @@ function updateMarkerList() {
 			+markers[i]['marker'].getPosition().lng().toFixed(5)+")"+"</li>" ).appendTo(markerList);
 	}
 }
+
+function removeMarkerList() {
+  markerList.empty();
+}
+
 function updatePathList() {
 	pathList.empty();
 	for(var i = 0; i < paths.length; i++) {
 		$( "<li>"+paths[i]['data']['first']+" <--> "+paths[i]['data']['second']+"</li>" ).appendTo(pathList);
 	}
+}
 
+function removePathList() {
+  pathList.empty();
 }
 

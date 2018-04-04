@@ -9,20 +9,16 @@ def start():
 
 @app.route('/submit', methods = ['POST'])
 def crunchData():
+	# Get data
 	data = request.get_json(force=True)
-
 	adjacencyMatrix = data['adjacency']
 	distanceMatrix = data['distance']
 	start = int(data['start'])
 	end = int(data['end'])
-	
-	print(type(start))
-	print(type(adjacencyMatrix[1][0]))
-
 
 	# Find shortest path
 	listOfShortestPath = AS.AStar(adjacencyMatrix, distanceMatrix, start, end)
-	print(listOfShortestPath)
+	
 	return jsonify(listOfShortestPath)
 
 if __name__ == '__main__':

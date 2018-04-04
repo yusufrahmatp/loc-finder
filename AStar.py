@@ -27,14 +27,17 @@ def subAStar(_adjacencyMatrix, _distanceMatrix, current, prev, _end, distanceSav
 	
 	for i in range(len(_adjacencyMatrix[current])) :
 		if (i != prev and _adjacencyMatrix[current][i] != 0) :
-			if (getFn(current, i, _end, distanceSaved, _distanceMatrix) < closest[1]) :
-				closest[0] = i
-				closest[1] = getGn(current, i, distanceSaved, _distanceMatrix)
-			elif (getFn(current, i, _end, distanceSaved, _distanceMatrix) == closest[1]) :
+			savedFn = getFn(current, i, _end, distanceSaved, _distanceMatrix)
+			if (savedFn < closest[1]) :
+				closest[0] = i 
+				closest[1] = getFn(current, i, _end, distanceSaved, _distanceMatrix)
+			elif (savedFn == closest[1]) :
 				if (i == _end) :
-					closest[0] = i
-					closest[1] = getGn(current, i, distanceSaved, _distanceMatrix)
+					closest[0] = i 
+					closest[1] = getFn(current, i, _end, distanceSaved, _distanceMatrix)
+	closest[1] = getGn(current, i, distanceSaved, _distanceMatrix)
 	return closest
+
 
 
 def getLongestDistance (current, _end, _distanceMatrix, distanceSaved) :

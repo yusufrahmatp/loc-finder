@@ -1,7 +1,7 @@
 def AStar(_adjacencyMatrix, _distanceMatrix, _start, _end) :
 # mencari jalan terdekat dari dua buah titik menggunakan fungsi A*
 # mengembalikan list of path
-	listOfPath = []
+	listOfPath = [_start]
 	closestInAdj = []
 	next = _start		# ini adalah nama simpul
 	prev = _start		# supaya tidak backtraking
@@ -27,11 +27,10 @@ def subAStar(_adjacencyMatrix, _distanceMatrix, current, prev, _end, distanceSav
 	
 	for i in range(len(_adjacencyMatrix[current])) :
 		if (i != prev and _adjacencyMatrix[current][i] != 0) :
-			savedFn = getFn(current, i, _end, distanceSaved, _distanceMatrix)
-			if (savedFn < closest[1]) :
+			if (getFn(current, i, _end, distanceSaved, _distanceMatrix) < closest[1]) :
 				closest[0] = i 
 				closest[1] = getFn(current, i, _end, distanceSaved, _distanceMatrix)
-			elif (savedFn == closest[1]) :
+			elif (getFn(current, i, _end, distanceSaved, _distanceMatrix) == closest[1]) :
 				if (i == _end) :
 					closest[0] = i 
 					closest[1] = getFn(current, i, _end, distanceSaved, _distanceMatrix)
@@ -54,7 +53,8 @@ def getLongestDistance (current, _end, _distanceMatrix, distanceSaved) :
 def getFn(current, next, _end, distanceSaved, _distanceMatrix) :
 	return getGn(current, next, distanceSaved, _distanceMatrix) + getHn(next, _end, _distanceMatrix)
 
-def getGn(current, next, distanceSaved, _distanceMatrix)	:
+def getGn(current, next, distanceSaved, _distanceMatrix) :
+# g(n) adalah jarak suatu titik ke titik berikutnya (tetangganya) ditambah jarak yang telah dilalui dari awal
 	return (_distanceMatrix[current][next] + distanceSaved)
 	
 def getHn(current, next, _distanceMatrix) :

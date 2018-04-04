@@ -13,11 +13,16 @@ def crunchData():
 
 	adjacencyMatrix = data['adjacency']
 	distanceMatrix = data['distance']
-	start = data['start']
-	end = data['end']
+	start = int(data['start'])
+	end = int(data['end'])
 	
+	print(type(start))
+	print(type(adjacencyMatrix[1][0]))
+
+
 	# Find shortest path
 	listOfShortestPath = AS.AStar(adjacencyMatrix, distanceMatrix, start, end)
+	print(listOfShortestPath)
 	return jsonify(listOfShortestPath)
 
 if __name__ == '__main__':

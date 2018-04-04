@@ -15,11 +15,10 @@ def crunchData():
 	distanceMatrix = data['distance']
 	start = data['start']
 	end = data['end']
-
+	
 	# Find shortest path
-	AS.AStar(adjacencyMatrix, distanceMatrix, start, end) 
-
-	return jsonify([0]);
+	listOfShortestPath = AS.AStar(adjacencyMatrix, distanceMatrix, start, end)
+	return jsonify(listOfShortestPath)
 
 if __name__ == '__main__':
 	app.run(port=5000)
